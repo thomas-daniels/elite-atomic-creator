@@ -1,0 +1,11 @@
+[package]
+name = "elite-atomic-creator"
+version = "0.1.0"
+authors = ["ProgramFOX <programfox@hotmail.be>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+reqwest = "0.9.20"
+chrono = "0.4.7"
