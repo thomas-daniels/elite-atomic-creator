@@ -6,10 +6,10 @@ use time::Duration;
 /// If `after` is not a Sunday, it returns the next Sunday.
 /// If `after` is a Sunday, it returns the same Sunday if the time is before 19:00 UTC,
 /// and the next Sunday if the time is after 19:00 UTC.
-fn date_of_next_tournament_after(after: DateTime<Utc>) -> Date<Utc> {
+fn datetime_of_next_tournament_after(after: DateTime<Utc>) -> DateTime<Utc> {
     let weekday = after.date().naive_utc().weekday();
 
-    if weekday == Weekday::Sun {
+    let date = if weekday == Weekday::Sun {
         if after.time().hour() < 19 {
             after.date()
         } else {
@@ -17,7 +17,8 @@ fn date_of_next_tournament_after(after: DateTime<Utc>) -> Date<Utc> {
         }
     } else {
         after.date() + Duration::days(7_i64 - i64::from(weekday.num_days_from_sunday()))
-    }
+    };
+    date.and_hms(19, 0, 0)
 }
 
 /// Returns the ordinal rank for a tournament played on `date`.
@@ -28,7 +29,7 @@ fn which(date: Date<Utc>) -> usize {
 }
 
 /// Transforms a date into the format that the Lichess API wants,
-/// i.e. milliseconds since January 1, 1970 UTC.
+/// i.e. the number of (non-leap) milliseconds since January 1, 1970 UTC.
 ///
 /// This function is just a single call but I'm still making a function
 /// for it here to keep all the date-related logic in one place.
@@ -46,8 +47,8 @@ mod tests {
             DateTime::<Utc>::from_utc(NaiveDate::from_ymd(2019, 8, 23).and_hms(18, 53, 00), Utc);
 
         assert_eq!(
-            date_of_next_tournament_after(after),
-            Date::<Utc>::from_utc(NaiveDate::from_ymd(2019, 8, 25), Utc)
+            datetime_of_next_tournament_after(after),
+            DateTime::<Utc>::from_utc(NaiveDate::from_ymd(2019, 8, 25).and_hms(19, 0, 0), Utc)
         );
     }
 
@@ -57,8 +58,8 @@ mod tests {
             DateTime::<Utc>::from_utc(NaiveDate::from_ymd(2019, 8, 25).and_hms(18, 53, 00), Utc);
 
         assert_eq!(
-            date_of_next_tournament_after(after),
-            Date::<Utc>::from_utc(NaiveDate::from_ymd(2019, 8, 25), Utc)
+            datetime_of_next_tournament_after(after),
+            DateTime::<Utc>::from_utc(NaiveDate::from_ymd(2019, 8, 25).and_hms(19, 0, 0), Utc)
         );
     }
 
@@ -68,8 +69,8 @@ mod tests {
             DateTime::<Utc>::from_utc(NaiveDate::from_ymd(2019, 8, 25).and_hms(19, 53, 00), Utc);
 
         assert_eq!(
-            date_of_next_tournament_after(after),
-            Date::<Utc>::from_utc(NaiveDate::from_ymd(2019, 9, 1), Utc)
+            datetime_of_next_tournament_after(after),
+            DateTime::<Utc>::from_utc(NaiveDate::from_ymd(2019, 9, 1).and_hms(19, 0, 0), Utc)
         );
     }
 
