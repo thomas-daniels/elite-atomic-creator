@@ -27,6 +27,15 @@ fn which(date: Date<Utc>) -> usize {
     (date.day() - 1) as usize / 7
 }
 
+/// Transforms a date into the format that the Lichess API wants,
+/// i.e. milliseconds since January 1, 1970 UTC.
+///
+/// This function is just a single call but I'm still making a function
+/// for it here to keep all the date-related logic in one place.
+fn to_millis(datetime: DateTime<Utc>) -> i64 {
+    datetime.timestamp_millis()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
