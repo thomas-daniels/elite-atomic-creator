@@ -36,7 +36,7 @@ pub fn create_tournament(
             ("variant", tour.variant),
             ("rated", &tour.rated.to_string()),
             ("berserkable", &tour.berserkable.to_string()),
-            ("minRating", &tour.min_rating.to_string()),
+            ("conditions.minRating.rating", &tour.min_rating.to_string()),
         ])
         .bearer_auth(api_token)
         .send()?;
