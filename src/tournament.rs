@@ -12,7 +12,7 @@ pub struct Info<'a> {
     pub min_rating: i32,
 }
 
-pub fn elite_atomic_at<'a>(datetime: date::UtcDateTime) -> Info<'a> {
+pub fn elite_atomic_at<'a>(datetime: &date::UtcDateTime) -> Info<'a> {
     let time_control = [(3, 2), (1, 1), (3, 0), (1, 0), (2, 1)][date::which(datetime)];
     Info {
         name: "Elite Atomic",
