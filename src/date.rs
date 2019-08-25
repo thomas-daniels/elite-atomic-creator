@@ -1,12 +1,19 @@
 use chrono::prelude::*;
 use time::Duration;
 
+/// This type has two purposes:
+/// * Avoiding to type the generics every time.
+/// * The other modules can use UtcDateTime without having to care
+///   about what the underlying type is, so the logic and crates used in
+///   date.rs can be changed without touching other modules.
+type UtcDateTime = DateTime<Utc>;
+
 /// Returns the next date for the Elite Atomic after the time specified in the parameter `after`.
 /// Elite Atomics happen on Sundays at 19:00 UTC.
 /// If `after` is not a Sunday, it returns the next Sunday.
 /// If `after` is a Sunday, it returns the same Sunday if the time is before 19:00 UTC,
 /// and the next Sunday if the time is after 19:00 UTC.
-fn datetime_of_next_tournament_after(after: DateTime<Utc>) -> DateTime<Utc> {
+fn datetime_of_next_tournament_after(after: UtcDateTime) -> UtcDateTime {
     let weekday = after.date().naive_utc().weekday();
 
     let date = if weekday == Weekday::Sun {
@@ -33,7 +40,7 @@ fn which(date: Date<Utc>) -> usize {
 ///
 /// This function is just a single call but I'm still making a function
 /// for it here to keep all the date-related logic in one place.
-fn to_millis(datetime: DateTime<Utc>) -> i64 {
+fn to_millis(datetime: UtcDateTime) -> i64 {
     datetime.timestamp_millis()
 }
 
@@ -44,33 +51,33 @@ mod tests {
     #[test]
     fn test_date_of_next_tournament_after_weekday() {
         let after =
-            DateTime::<Utc>::from_utc(NaiveDate::from_ymd(2019, 8, 23).and_hms(18, 53, 00), Utc);
+            UtcDateTime::from_utc(NaiveDate::from_ymd(2019, 8, 23).and_hms(18, 53, 00), Utc);
 
         assert_eq!(
             datetime_of_next_tournament_after(after),
-            DateTime::<Utc>::from_utc(NaiveDate::from_ymd(2019, 8, 25).and_hms(19, 0, 0), Utc)
+            UtcDateTime::from_utc(NaiveDate::from_ymd(2019, 8, 25).and_hms(19, 0, 0), Utc)
         );
     }
 
     #[test]
     fn test_date_of_next_tournament_after_sunday_before_19() {
         let after =
-            DateTime::<Utc>::from_utc(NaiveDate::from_ymd(2019, 8, 25).and_hms(18, 53, 00), Utc);
+            UtcDateTime::from_utc(NaiveDate::from_ymd(2019, 8, 25).and_hms(18, 53, 00), Utc);
 
         assert_eq!(
             datetime_of_next_tournament_after(after),
-            DateTime::<Utc>::from_utc(NaiveDate::from_ymd(2019, 8, 25).and_hms(19, 0, 0), Utc)
+            UtcDateTime::from_utc(NaiveDate::from_ymd(2019, 8, 25).and_hms(19, 0, 0), Utc)
         );
     }
 
     #[test]
     fn test_date_of_next_tournament_after_sunday_after_19() {
         let after =
-            DateTime::<Utc>::from_utc(NaiveDate::from_ymd(2019, 8, 25).and_hms(19, 53, 00), Utc);
+            UtcDateTime::from_utc(NaiveDate::from_ymd(2019, 8, 25).and_hms(19, 53, 00), Utc);
 
         assert_eq!(
             datetime_of_next_tournament_after(after),
-            DateTime::<Utc>::from_utc(NaiveDate::from_ymd(2019, 9, 1).and_hms(19, 0, 0), Utc)
+            UtcDateTime::from_utc(NaiveDate::from_ymd(2019, 9, 1).and_hms(19, 0, 0), Utc)
         );
     }
 
