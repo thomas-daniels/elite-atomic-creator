@@ -44,6 +44,14 @@ fn to_millis(datetime: UtcDateTime) -> i64 {
     datetime.timestamp_millis()
 }
 
+/// Returns an UtcDateTime for the current time.
+///
+/// Again a single call just like to_millis, with the same idea
+/// to isolate all date-related logic.
+fn now() -> UtcDateTime {
+    Utc::now()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
