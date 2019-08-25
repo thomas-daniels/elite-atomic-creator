@@ -20,6 +20,13 @@ fn date_of_next_tournament_after(after: DateTime<Utc>) -> Date<Utc> {
     }
 }
 
+/// Returns the ordinal rank for a tournament played on `date`.
+/// Meaning, returns 0 if the first tournament of the month happens on `date`,
+/// 1 if the second tournament of the month happens on `date`, etc.
+fn which(date: Date<Utc>) -> usize {
+    (date.day() - 1) as usize / 7
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -54,6 +61,78 @@ mod tests {
         assert_eq!(
             date_of_next_tournament_after(after),
             Date::<Utc>::from_utc(NaiveDate::from_ymd(2019, 9, 1), Utc)
+        );
+    }
+
+    #[test]
+    fn test_which_0() {
+        assert_eq!(
+            which(Date::<Utc>::from_utc(NaiveDate::from_ymd(2019, 7, 7), Utc)),
+            0
+        );
+        assert_eq!(
+            which(Date::<Utc>::from_utc(NaiveDate::from_ymd(2019, 8, 4), Utc)),
+            0
+        );
+        assert_eq!(
+            which(Date::<Utc>::from_utc(NaiveDate::from_ymd(2019, 9, 1), Utc)),
+            0
+        );
+    }
+
+    #[test]
+    fn test_which_1() {
+        assert_eq!(
+            which(Date::<Utc>::from_utc(NaiveDate::from_ymd(2019, 7, 14), Utc)),
+            1
+        );
+        assert_eq!(
+            which(Date::<Utc>::from_utc(NaiveDate::from_ymd(2019, 8, 11), Utc)),
+            1
+        );
+        assert_eq!(
+            which(Date::<Utc>::from_utc(NaiveDate::from_ymd(2019, 9, 8), Utc)),
+            1
+        );
+    }
+
+    #[test]
+    fn test_which_2() {
+        assert_eq!(
+            which(Date::<Utc>::from_utc(NaiveDate::from_ymd(2019, 7, 21), Utc)),
+            2
+        );
+        assert_eq!(
+            which(Date::<Utc>::from_utc(NaiveDate::from_ymd(2019, 8, 18), Utc)),
+            2
+        );
+        assert_eq!(
+            which(Date::<Utc>::from_utc(NaiveDate::from_ymd(2019, 9, 15), Utc)),
+            2
+        );
+    }
+
+    #[test]
+    fn test_which_3() {
+        assert_eq!(
+            which(Date::<Utc>::from_utc(NaiveDate::from_ymd(2019, 7, 28), Utc)),
+            3
+        );
+        assert_eq!(
+            which(Date::<Utc>::from_utc(NaiveDate::from_ymd(2019, 8, 25), Utc)),
+            3
+        );
+        assert_eq!(
+            which(Date::<Utc>::from_utc(NaiveDate::from_ymd(2019, 9, 22), Utc)),
+            3
+        );
+    }
+
+    #[test]
+    fn test_which_4() {
+        assert_eq!(
+            which(Date::<Utc>::from_utc(NaiveDate::from_ymd(2019, 9, 29), Utc)),
+            4
         );
     }
 }
