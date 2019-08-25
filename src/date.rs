@@ -6,14 +6,14 @@ use time::Duration;
 /// * The other modules can use UtcDateTime without having to care
 ///   about what the underlying type is, so the logic and crates used in
 ///   date.rs can be changed without touching other modules.
-type UtcDateTime = DateTime<Utc>;
+pub type UtcDateTime = DateTime<Utc>;
 
 /// Returns the next date for the Elite Atomic after the time specified in the parameter `after`.
 /// Elite Atomics happen on Sundays at 19:00 UTC.
 /// If `after` is not a Sunday, it returns the next Sunday.
 /// If `after` is a Sunday, it returns the same Sunday if the time is before 19:00 UTC,
 /// and the next Sunday if the time is after 19:00 UTC.
-fn datetime_of_next_tournament_after(after: UtcDateTime) -> UtcDateTime {
+pub fn datetime_of_next_tournament_after(after: UtcDateTime) -> UtcDateTime {
     let weekday = after.date().naive_utc().weekday();
 
     let date = if weekday == Weekday::Sun {
@@ -31,7 +31,7 @@ fn datetime_of_next_tournament_after(after: UtcDateTime) -> UtcDateTime {
 /// Returns the ordinal rank for a tournament played on `date`.
 /// Meaning, returns 0 if the first tournament of the month happens on `date`,
 /// 1 if the second tournament of the month happens on `date`, etc.
-fn which(date: UtcDateTime) -> usize {
+pub fn which(date: UtcDateTime) -> usize {
     (date.day() - 1) as usize / 7
 }
 
@@ -40,7 +40,7 @@ fn which(date: UtcDateTime) -> usize {
 ///
 /// This function is just a single call but I'm still making a function
 /// for it here to keep all the date-related logic in one place.
-fn to_millis(datetime: UtcDateTime) -> i64 {
+pub fn to_millis(datetime: UtcDateTime) -> i64 {
     datetime.timestamp_millis()
 }
 
@@ -48,7 +48,7 @@ fn to_millis(datetime: UtcDateTime) -> i64 {
 ///
 /// Again a single call just like to_millis, with the same idea
 /// to isolate all date-related logic.
-fn now() -> UtcDateTime {
+pub fn now() -> UtcDateTime {
     Utc::now()
 }
 
