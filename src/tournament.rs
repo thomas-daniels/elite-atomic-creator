@@ -1,15 +1,15 @@
 use crate::date;
 
 pub struct Info<'a> {
-    name: &'a str,
-    clock_time: i32,
-    clock_increment: i32,
-    minutes: i32,
-    start_date: i64,
-    variant: &'a str,
-    rated: bool,
-    berserkable: bool,
-    min_rating: i32,
+    pub name: &'a str,
+    pub clock_time: i32,
+    pub clock_increment: i32,
+    pub minutes: i32,
+    pub start_date: i64,
+    pub variant: &'a str,
+    pub rated: bool,
+    pub berserkable: bool,
+    pub min_rating: i32,
 }
 
 pub fn elite_atomic_at<'a>(datetime: date::UtcDateTime) -> Info<'a> {
